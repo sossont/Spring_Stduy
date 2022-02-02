@@ -1,2 +1,2 @@
-# Spring_Stduy
+# Spring_Study
 스프링 핵심 원리 강의 수강 기록 (22/02/03~)
