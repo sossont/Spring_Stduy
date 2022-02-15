@@ -1,21 +1,28 @@
 package hello.core.order;
 
 import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import hello.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class OrderServiceImpl implements OrderService{
+@Component
+public class OrderServiceImpl implements OrderService {
 
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
 
     //    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
     //    private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
 
+    @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
@@ -25,11 +32,12 @@ public class OrderServiceImpl implements OrderService{
         Member member = memberRepository.findById(memberId);
         int discountPrice = discountPolicy.Discount(member, itemPrice);
 
-        return new Order(memberId,itemName, itemPrice, discountPrice);
+        return new Order(memberId, itemName, itemPrice, discountPrice);
     }
 
     // For Test
-    public MemberRepository getMemberRepository(){
+    public MemberRepository getMemberRepository() {
         return memberRepository;
     }
+
 }

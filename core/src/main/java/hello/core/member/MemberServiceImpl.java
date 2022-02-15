@@ -1,12 +1,17 @@
 package hello.core.member;
 
-public class MemberServiceImpl implements MemberService{
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberRepository memberRepository;
+
+    @Autowired
     public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
-    private final MemberRepository memberRepository;
 
     @Override
     public void signUp(Member member) {
@@ -20,7 +25,7 @@ public class MemberServiceImpl implements MemberService{
 
     // For Test
 
-    public MemberRepository getMemberRepository(){
+    public MemberRepository getMemberRepository() {
         return memberRepository;
     }
 }
