@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
-    private final OrderSimpleQueryRepository orderSimpleQueryRepository
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     // 정상작동하려면 Hibernate5Module 사용해야한다.
     // DTO 로 변환해서 사용하는 것이 더 좋다.
@@ -45,18 +45,16 @@ public class OrderSimpleApiController {
     public List<SimpleOrderDto> ordersV2() {
         // N+1 문제 발생
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
-        List<SimpleOrderDto> result = orders.stream().map(o -> new SimpleOrderDto(o))
+        return orders.stream().map(o -> new SimpleOrderDto(o))
                 .collect(Collectors.toList());
-        return result;
     }
 
     @GetMapping("/api/v3/simple-orders")
     public List<SimpleOrderDto> ordersV3() {
         // N+1 문제 발생
         List<Order> orders = orderSimpleQueryRepository.findAllWithMemberDelivery();
-        List<SimpleOrderDto> result = orders.stream().map(
+        return orders.stream().map(
                 o -> new SimpleOrderDto(o)).collect(Collectors.toList());
-        return result;
     }
 
     @GetMapping("/api/v4/simple-orders")
