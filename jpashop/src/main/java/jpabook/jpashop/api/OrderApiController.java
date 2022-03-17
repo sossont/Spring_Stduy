@@ -6,6 +6,9 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.domain.repository.OrderRepository;
 import jpabook.jpashop.domain.repository.OrderSearch;
+import jpabook.jpashop.domain.repository.order.query.OrderFlatDto;
+import jpabook.jpashop.domain.repository.order.query.OrderQueryDto;
+import jpabook.jpashop.domain.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     // Hibernate5 Module이 없으면 동작하지 않는다.
     @GetMapping("/api/v1/orders")
@@ -67,6 +71,21 @@ public class OrderApiController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> ordersV4() {
+        return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() {
+        return orderQueryRepository.findAllByDto();
+    }
+
+    @GetMapping("/api/v6/orders")
+    public List<OrderQueryDto> ordersV6() {
+        List<OrderFlatDto> dtoFlat = orderQueryRepository.findAllByDto_flat();
+        return null;
+    }
 
     @Getter
     static class OrderDto {
